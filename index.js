@@ -6,18 +6,18 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async message => {
-	if (message.author.bot || !message.guild) return;
-	const content = message.content.toLowerCase();
+    if (message.author.bot || !message.guild) return;
+    const content = message.content.toLowerCase();
     if (content.includes('ratio')) {
-        let random = Math.floor(Math.random() * 2);
-        message.react(random == 0 ? '👎' : '👍')
+        let ratioDeclined = Math.floor(Math.random() * 2) == 0;
+        message.react(ratioDeclined ? '👎' : '👍').catch(reason => console.log('Couldn\'t add reaction: ' + reason))
         message.reply({
             files: [
-                random == 0 
+                ratioDeclined
                     ? "https://docs.idkwuu.dev/ratiodeclined.png"
                     : "https://docs.idkwuu.dev/ratioaccepted.png"
             ]
-        });
+        }).catch(reason => console.log('Couldn\'t send ratio image: ' + reason));
     }
 });
 
