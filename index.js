@@ -48,7 +48,7 @@ client.on("messageCreate", async (message) => {
 
 	const ratioOverride = overrides?.[message.author.id];
 	if (ratioOverride) {
-		ratio = ratioOverride === "accept" ? true : false;
+		ratio = ratioOverride === "accept";
 	} else {
 		ratio = Math.floor(Math.random() * 2) == 0;
 	}
