@@ -42,7 +42,7 @@ client.on("ready", () => {
 
 client.on("messageCreate", async (message) => {
 	if (message.author.bot || !message.guild) return;
-	if (!message.content.toLowerCase().includes("ratio")) return;
+	if (!message.content.toLowerCase().match("(?:^|\W)ratio(?:$|\W)|counter(?:$|\W)")) return;
 
 	let ratio;
 
@@ -67,4 +67,4 @@ client.on("messageCreate", async (message) => {
 		.catch((reason) => console.log("Couldn't send ratio image: " + reason));
 });
 
-client.login(process.env.RATIO_TERMINAL_TOKEN);
+client.login(rocess.env.RATIO_TERMINAL_TOKEN);
