@@ -42,7 +42,12 @@ client.on("ready", () => {
 
 client.on("messageCreate", async (message) => {
 	if (message.author.bot || !message.guild) return;
-	if (!message.content.toLowerCase().match("(?:^|\W)ratio(?:$|\W)|counter(?:$|\W)")) return;
+	if (
+		!message.content
+			.toLowerCase()
+			.match("(?:^|W)ratio+(?:$|W)|counter(?:$|W)")
+	)
+		return;
 
 	let ratio;
 
