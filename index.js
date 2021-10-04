@@ -36,18 +36,15 @@ try {
 	overrides = require("./overrides.json");
 } catch {}
 
+const regex = /(?:^|\W)ratio+(?:$|\W)|counter(?:$|\W)/;
+
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on("messageCreate", async (message) => {
 	if (message.author.bot || !message.guild) return;
-	if (
-		!message.content
-			.toLowerCase()
-			.match("(?:^|W)ratio+(?:$|W)|counter(?:$|W)")
-	)
-		return;
+	if (!regex.test(message.content.toLowerCase())) return;
 
 	let ratio;
 
