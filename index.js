@@ -67,4 +67,4 @@ client.on("messageCreate", async (message) => {
 		.catch((reason) => console.log("Couldn't send ratio image: " + reason));
 });
 
-client.login(rocess.env.RATIO_TERMINAL_TOKEN);
+client.login(process.env.RATIO_TERMINAL_TOKEN);
