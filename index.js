@@ -36,36 +36,44 @@ try {
 	overrides = require("./overrides.json");
 } catch {}
 
-const regex = /(?:^|\W)ratio+(?:$|\W)|counter(?:$|\W)/;
-
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on("messageCreate", async (message) => {
 	if (message.author.bot || !message.guild) return;
-	if (!regex.test(message.content.toLowerCase())) return;
+	if (
+		!message.content
+			.toLowerCase()
+			.match("(?:^|W)ratio+(?:$|W)|counter(?:$|W)")
+	)
+		return;
 
 	let ratio;
 
 	const ratioOverride = overrides?.[message.author.id];
 	if (ratioOverride) {
-		ratio = ratioOverride === "accept";
+		switch (ratioOverride) {
+			case "accept": ratio = 0; break;
+			case "deny": ratio = 1; break;
+			case "no-u": ratio = 2; break;
+		}
 	} else {
-		ratio = Math.floor(Math.random() * 2) == 0;
+		ratio = Math.floor(Math.random() * 3);
+	}
+
+	let image;
+	switch (ratio) {
+		case 0: image = "https://docs.idkwuu.dev/ratioaccepted.png"; break;
+		case 1: image = "https://docs.idkwuu.dev/ratiodeclined.png"; break;
+		case 2: image = "https://docs.idkwuu.dev/ratioidk.png"; break;
 	}
 
 	message
-		.react(ratio ? "👍" : "👎")
+		.react(ratio == 0 ? "👍" : "👎")
 		.catch((reason) => console.log("Couldn't add reaction: " + reason));
 	message
-		.reply({
-			files: [
-				ratio
-					? "https://docs.idkwuu.dev/ratioaccepted.png"
-					: "https://docs.idkwuu.dev/ratiodeclined.png",
-			],
-		})
+		.reply({files: [image]})
 		.catch((reason) => console.log("Couldn't send ratio image: " + reason));
 });
 
