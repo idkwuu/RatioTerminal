@@ -62,19 +62,10 @@ client.on("messageCreate", async (message) => {
 		ratio = Math.floor(Math.random() * 3);
 	}
 
-	let image;
-	switch (ratio) {
-		case 0: image = "https://docs.idkwuu.dev/ratioaccepted.png"; break;
-		case 1: image = "https://docs.idkwuu.dev/ratiodeclined.png"; break;
-		case 2: image = "https://docs.idkwuu.dev/ratioidk.png"; break;
-	}
-
 	message
 		.react(ratio == 0 ? "👍" : "👎")
 		.catch((reason) => console.log("Couldn't add reaction: " + reason));
 	message
-		.reply({files: [image]})
-		.catch((reason) => console.log("Couldn't send ratio image: " + reason));
 });
 
 client.login(process.env.RATIO_TERMINAL_TOKEN);
