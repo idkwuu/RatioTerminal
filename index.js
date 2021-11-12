@@ -36,6 +36,8 @@ try {
 	overrides = require("./overrides.json");
 } catch {}
 
+let timeouts = {};
+
 const regex = /(?:^|\W)ratio+(?:$|\W)|counter(?:$|\W)/;
 
 client.on("ready", () => {
@@ -44,15 +46,40 @@ client.on("ready", () => {
 
 client.on("messageCreate", async (message) => {
 	if (message.author.bot || !message.guild) return;
+
+	if (message.content == 'ratio bot send code!!') {
+        return message.reply({
+            files: ["./ratio.js"]
+        });
+    }
+
 	if (!regex.test(message.content.toLowerCase())) return;
 
 	let ratio;
+
+	// Ratio overrides, in overrides.json
 
 	const ratioOverride = overrides?.[message.author.id];
 	if (ratioOverride) {
 		ratio = ratioOverride === "accept";
 	} else {
 		ratio = Math.floor(Math.random() * 2) == 0;
+	}
+
+	// Timeout - one ratio per minute
+	let timeoutdata = timeouts[message.author.id]
+	if (timeoutdata != undefined) {
+		let timediff = new Date() - timeoutdata;
+		if (timediff >= 60000) {
+			timeouts[message.author.id] = new Date();
+		} else {
+			message
+				.react("💀")
+				.catch((reason) => console.log("Couldn't add no ratio reaction: " + reason));
+			return;
+		}
+	} else {
+		timeouts[message.author.id] = new Date();
 	}
 
 	message
