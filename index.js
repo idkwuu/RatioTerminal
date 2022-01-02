@@ -53,12 +53,21 @@ client.on("messageCreate", async (message) => {
         });
     }
 
+	if (message.content == 'ratio bot send overrides!!') {
+        try {
+			return message.reply({
+				files: ["./overrides.json"]
+			});
+		} catch {
+			return message.reply("There are no overrides (because a overrides.json file does not exist).");
+		}
+    }
+
 	if (!regex.test(message.content.toLowerCase())) return;
 
 	let ratio;
 
 	// Ratio overrides, in overrides.json
-
 	const ratioOverride = overrides?.[message.author.id];
 	if (ratioOverride) {
 		ratio = ratioOverride === "accept";
