@@ -19,7 +19,7 @@ export default function handleThisRatio(bot: Bot, message: DiscordenoMessage) {
     if (timeoutData != undefined) {
         const timeDiff = new Date().getTime() - timeoutData.getTime()
         // One ratio per minute
-        if (timeDiff >= 60000) {
+        if (timeDiff >= 15000) {
             timeouts.set(message.authorId, new Date())
         } else {
             addReaction(bot, message.channelId, message.id, "💀")
