@@ -54,7 +54,7 @@ async def score(ctx, user: Option(discord.Member, description="Expose someone's 
     r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user.id}')
     if r.status_code == 200:
         user_score = r.json()['score']
-        await ctx.respond(f'Your ✨ ratio score ✨ is {user_score}')
+        await ctx.respond(f'{user}\'s ✨ ratio score ✨ is {user_score}')
     else:
         pass
 
