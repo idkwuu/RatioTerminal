@@ -14,7 +14,7 @@ intents.message_content = True
 intents.guild_reactions = True
 bot = discord.Bot(intents=intents)
 
-allowed_guild_ids = [741849482584653854]
+allowed_guild_ids = []
 
 
 @bot.event

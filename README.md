@@ -18,6 +18,8 @@ There are currently 2 parts of this bot:
 - Required Python packages
   - requests
   - py-cord
+- Leaderboard setup in the Discord bot files
+  - Edit the `allowed_guild_ids` variable in `discord_bot/main.py` to include the server IDs that you want the bot to be in.
 
 ### Leaderboard
 
