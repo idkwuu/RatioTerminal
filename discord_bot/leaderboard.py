@@ -1,5 +1,6 @@
 import json
 import requests
+import os
 
 
 def send_score_to_leaderboard(user_id: str, server_id: str, was_accepted: bool):

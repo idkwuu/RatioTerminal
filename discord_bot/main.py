@@ -14,8 +14,6 @@ intents.message_content = True
 intents.guild_reactions = True
 bot = discord.Bot(intents=intents)
 
-allowed_guild_ids = []
-
 
 @bot.event
 async def on_ready():
@@ -33,6 +31,7 @@ async def on_message(message):
     # Send link to source code
     if content == 'ratio bot send code!!':
         await message.channel.send('https://github.com/idkwuu/RatioTerminal', reference=message)
+        return
 
     # Check if message is a ratio or a counter
     message_is_ratio_or_counter = re.search(ratio_counter_regex, content) is not None
@@ -45,16 +44,21 @@ async def leaderboards(ctx):
     await ctx.respond("Work in progress.")
 
 
-@bot.slash_command(guild_ids=allowed_guild_ids, description='Get your ✨ ratio score ✨')
-async def score(ctx, user: Option(discord.Member, description="Expose someone's (or yours) ratio score")):
-    if bot.user == user:
+@bot.slash_command(guild_ids=bot.guilds, description='Get your ✨ ratio score ✨')
+async def score(ctx, user: Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
+    user_id = ctx.author.id if user is None else user.id
+
+    if bot.user.id == user_id:
         await ctx.respond('My ✨ ratio score ✨ is ***infinite***. Btw, ratio declined.')
         return
 
-    r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user.id}')
+    r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user_id}')
     if r.status_code == 200:
         user_score = r.json()['score']
-        await ctx.respond(f'{user}\'s ✨ ratio score ✨ is {user_score}')
+        if user is None:
+            await ctx.respond(f'Your ✨ ratio score ✨ is {user_score}')
+        else:
+            await ctx.respond(f'{user}\'s ✨ ratio score ✨ is {user_score}')
     else:
         pass
 
