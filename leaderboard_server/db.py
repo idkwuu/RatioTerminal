@@ -25,6 +25,10 @@ def lb_db_get_user_server_record(user_id: str, server_id: str):
     return cur.execute("SELECT * FROM leaderboard WHERE user_id = ? AND server_id = ?", [user_id, server_id]).fetchone()
 
 
+def lb_db_get_server_leaderboard(server_id: str):
+    return cur.execute("SELECT user_id, score FROM leaderboard WHERE server_id = ? ORDER BY score DESC", [server_id]).fetchall()
+
+
 def lb_db_change_score(user_id: str, server_id: str, score: int):
     sqlite_record = lb_db_get_user_server_record(user_id, server_id)
     if sqlite_record is None:

@@ -1,3 +1,6 @@
+import json
+
+import flask
 from flask import Flask, request
 from db import *
 
@@ -15,9 +18,20 @@ def lb_set_score():
         )
     else:
         score = lb_db_get_user_score(user_id)
-    return {
-        'score': score
-    }
+    res = flask.Response(json.dumps({'score': score}))
+    res.headers['Content-Type'] = 'application/json'
+    return res
+
+
+@app.route('/ratioterminal/leaderboard', methods=['GET'])
+def lb_get_server():
+    scores = lb_db_get_server_leaderboard(request.args['server_id'])
+    leaderboard = []
+    for s in scores:
+        leaderboard.append({'user_id': s[0], 'score': s[1]})
+    res = flask.Response(json.dumps(leaderboard))
+    res.headers['Content-Type'] = 'application/json'
+    return res
 
 
 lb_db_init()

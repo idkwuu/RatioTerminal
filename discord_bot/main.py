@@ -1,10 +1,7 @@
-import os
-
-import discord
 import re
 from discord import Option
 from handle_ratio import handle_ratio
-import requests
+from leaderboard import *
 
 ratio_counter_regex = r"(?:^|\W)ratio+(?:$|\W)|counter(?:$|\W)"
 
@@ -39,9 +36,9 @@ async def on_message(message):
         await handle_ratio(message)
 
 
-@bot.slash_command(guild_ids=[])
-async def leaderboards(ctx):
-    await ctx.respond("Work in progress.")
+@bot.slash_command(description='Get the server leaderboard')
+async def leaderboard(ctx: discord.ApplicationContext):
+    await get_server_leaderboard(ctx, '392856522532585492')
 
 
 @bot.slash_command(description='Get your ✨ ratio score ✨')
