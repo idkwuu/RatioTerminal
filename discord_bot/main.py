@@ -44,8 +44,9 @@ async def leaderboards(ctx):
     await ctx.respond("Work in progress.")
 
 
-@bot.slash_command(guild_ids=bot.guilds, description='Get your ✨ ratio score ✨')
-async def score(ctx, user: Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
+@bot.slash_command(description='Get your ✨ ratio score ✨')
+async def score(ctx,
+                user: Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
     user_id = ctx.author.id if user is None else user.id
 
     if bot.user.id == user_id:
