@@ -55,7 +55,7 @@ async def score(ctx: discord.ApplicationContext,
         data = r.json()
         global_score = data['global']
         server_score = data['server']
-        await ctx.respond(discord.Embed(
+        await ctx.respond(embed=discord.Embed(
             title=f'✨ Ratio score - {user}',
             description=f'🌍 Global: {global_score}\n📍 This server: {server_score}'
         ))
