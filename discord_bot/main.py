@@ -42,7 +42,7 @@ async def leaderboard(ctx: discord.ApplicationContext):
 
 
 @bot.slash_command(description='Get your ✨ ratio score ✨')
-async def score(ctx,
+async def score(ctx: discord.ApplicationContext,
                 user: Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
     user_id = ctx.author.id if user is None else user.id
 
@@ -50,13 +50,15 @@ async def score(ctx,
         await ctx.respond('My ✨ ratio score ✨ is ***infinite***. Btw, ratio declined.')
         return
 
-    r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user_id}')
+    r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user_id}&server_id={ctx.guild.id}')
     if r.status_code == 200:
-        user_score = r.json()['score']
-        if user is None:
-            await ctx.respond(f'Your ✨ ratio score ✨ is {user_score}')
-        else:
-            await ctx.respond(f'{user}\'s ✨ ratio score ✨ is {user_score}')
+        data = r.json()
+        global_score = data['global']
+        server_score = data['server']
+        await ctx.respond(discord.Embed(
+            title=f'✨ Ratio score - {user}',
+            description=f'🌍 Global: {global_score}\n📍 This server: {server_score}'
+        ))
     else:
         pass
 

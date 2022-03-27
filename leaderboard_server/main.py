@@ -8,17 +8,20 @@ app = Flask('RatioTerminalLeaderboard')
 
 
 @app.route('/ratioterminal/score', methods=['POST', 'GET'])
-def lb_set_score():
+def lb_score():
     user_id = request.args['user_id']
+    server_id = request.args['server_id']
     if request.method == 'POST':
         score = lb_db_change_score(
             user_id,
-            request.json['server_id'],
+            server_id,
             request.json['score']
         )
+        res = flask.Response(json.dumps({'score': score}))
     else:
-        score = lb_db_get_user_score(user_id)
-    res = flask.Response(json.dumps({'score': score}))
+        global_score = lb_db_get_user_score(user_id)
+        server_score = lb_db_get_user_server_record(user_id, server_id)
+        res = flask.Response(json.dumps({'global': global_score, 'server': server_score}))
     res.headers['Content-Type'] = 'application/json'
     return res
 
