@@ -20,7 +20,7 @@ def lb_score():
         res = flask.Response(json.dumps({'score': score}))
     else:
         global_score = lb_db_get_user_score(user_id)
-        server_score = lb_db_get_user_server_record(user_id, server_id)
+        server_score = lb_db_get_user_server_score(user_id, server_id)
         res = flask.Response(json.dumps({'global': global_score, 'server': server_score}))
     res.headers['Content-Type'] = 'application/json'
     return res

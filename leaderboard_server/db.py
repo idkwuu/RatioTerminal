@@ -21,6 +21,10 @@ def lb_db_get_user_score(user_id: str):
     return final_score
 
 
+def lb_db_get_user_server_score(user_id: str, server_id: str):
+    return lb_db_get_user_server_record(user_id, server_id)[3]
+
+
 def lb_db_get_user_server_record(user_id: str, server_id: str):
     return cur.execute("SELECT * FROM leaderboard WHERE user_id = ? AND server_id = ?", [user_id, server_id]).fetchone()
 
