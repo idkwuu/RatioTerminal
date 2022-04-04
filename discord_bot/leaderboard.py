@@ -15,9 +15,9 @@ def send_score_to_leaderboard(user_id: str, server_id: str, was_accepted: bool):
     )
 
 
-async def get_server_leaderboard(ctx: discord.ApplicationContext, server_id: str):
+async def get_server_leaderboard(ctx: discord.ApplicationContext):
     r = requests.get(
-        f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/leaderboard?server_id={server_id}')
+        f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/leaderboard?server_id={ctx.guild.id}')
     scores = r.json()
     description = []
     for s in scores:

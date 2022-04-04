@@ -38,7 +38,7 @@ async def on_message(message):
 
 @bot.slash_command(description='Get the server leaderboard')
 async def leaderboard(ctx: discord.ApplicationContext):
-    await get_server_leaderboard(ctx, '392856522532585492')
+    await get_server_leaderboard(ctx)
 
 
 @bot.slash_command(description='Get your ✨ ratio score ✨')
