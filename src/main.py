@@ -1,7 +1,12 @@
 import re
-from discord import Option
+import discord
+
 from handle_ratio import handle_ratio
-from leaderboard import *
+import leaderboard as lb
+import os
+from database import db_init
+
+import asyncio
 
 ratio_counter_regex = r"(?:^|\W)ratio+(?:$|\W)|counter(?:$|\W)"
 
@@ -38,12 +43,12 @@ async def on_message(message):
 
 @bot.slash_command(description='Get the server leaderboard')
 async def leaderboard(ctx: discord.ApplicationContext):
-    await get_server_leaderboard(ctx)
+    await lb.get_server_leaderboard(ctx)
 
 
 @bot.slash_command(description='Get your ✨ ratio score ✨')
 async def score(ctx: discord.ApplicationContext,
-                user: Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
+                user: discord.Option(discord.Member, description="Expose someone's (or yours) ratio score", required=False)):
     user_data = ctx.author if user is None else user
     user_id = user_data.id
 
@@ -51,17 +56,18 @@ async def score(ctx: discord.ApplicationContext,
         await ctx.respond('My ✨ ratio score ✨ is ***infinite***. Btw, ratio declined.')
         return
 
-    r = requests.get(f'{os.environ["RATIO_TERMINAL_LEADERBOARD_SERVER"]}/ratioterminal/score?user_id={user_id}&server_id={ctx.guild.id}')
-    if r.status_code == 200:
-        data = r.json()
-        global_score = data['global']
-        server_score = data['server']
-        await ctx.respond(embed=discord.Embed(
-            title=f'✨ Ratio score - {user_data}',
-            description=f'🌍 Global: {global_score}\n📍 This server: {server_score}'
-        ))
-    else:
-        pass
+    data = await lb.get_user_score(ctx)
+    global_score = data['global']
+    server_score = data['server']
+    await ctx.respond(embed=discord.Embed(
+        title=f'✨ Ratio score - {user_data}',
+        description=f'🌍 Global: {global_score}\n📍 This server: {server_score}'
+    ))
 
 
-bot.run(os.environ['RATIO_TERMINAL_TOKEN'])
+if __name__ == '__main__':
+    exist = os.path.isdir('data')
+    if not exist:
+        os.mkdir('data')
+    db_init()
+    asyncio.run(bot.run(os.environ['RATIO_TERMINAL_TOKEN']))
