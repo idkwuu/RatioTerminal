@@ -1,0 +1,9 @@
+version: "3"
+services:
+  ratioterminal:
+    image: idkwuu/ratioterminal:latest
+    container_name: ratioterminal
+    environment:
+      - RATIO_TERMINAL_TOKEN=HERE_GOES_YOUR_TOKEN
+    volumes:
+      - ./data:/data
